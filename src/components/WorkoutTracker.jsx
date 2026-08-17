@@ -107,12 +107,27 @@ export function WorkoutTracker() {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  const stats = {
-    done: Object.values(workoutData).filter(s => s === 'done').length,
-    missed: Object.values(workoutData).filter(s => s === 'missed').length,
-    recovered: Object.values(workoutData).filter(s => s === 'recovered').length,
-    rest: Object.values(workoutData).filter(s => s === 'rest').length,
+  const viewedYear = format(currentMonth, 'yyyy')
+  const viewedMonthPrefix = format(currentMonth, 'yyyy-MM')
+  const isCurrentYear = currentMonth.getFullYear() === today.getFullYear()
+  const isCurrentMonth = isSameMonth(currentMonth, today)
+
+  const yearStats = {
+    done: Object.entries(workoutData).filter(([k, s]) => k.startsWith(viewedYear) && s === 'done').length,
+    missed: Object.entries(workoutData).filter(([k, s]) => k.startsWith(viewedYear) && s === 'missed').length,
+    recovered: Object.entries(workoutData).filter(([k, s]) => k.startsWith(viewedYear) && s === 'recovered').length,
+    rest: Object.entries(workoutData).filter(([k, s]) => k.startsWith(viewedYear) && s === 'rest').length,
   }
+
+  const monthStats = {
+    done: Object.entries(workoutData).filter(([k, s]) => k.startsWith(viewedMonthPrefix) && s === 'done').length,
+    missed: Object.entries(workoutData).filter(([k, s]) => k.startsWith(viewedMonthPrefix) && s === 'missed').length,
+    recovered: Object.entries(workoutData).filter(([k, s]) => k.startsWith(viewedMonthPrefix) && s === 'recovered').length,
+    rest: Object.entries(workoutData).filter(([k, s]) => k.startsWith(viewedMonthPrefix) && s === 'rest').length,
+  }
+
+  const yearLabel = isCurrentYear ? `This Year (${viewedYear})` : `Year ${viewedYear}`
+  const monthLabel = isCurrentMonth ? `This Month (${format(currentMonth, 'MMMM')})` : format(currentMonth, 'MMMM yyyy')
 
   const statusOptions = [
     { value: 'done', label: 'Workout Completed', color: '#22c55e', icon: '✓' },
@@ -173,21 +188,50 @@ export function WorkoutTracker() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
-        <div className="stat-item">
-          <span className="stat-value" style={{ color: '#22c55e' }}>{stats.done}</span>
-          <span className="stat-label">Done</span>
+        <div className="stats-section">
+          <div className="stats-tag">{yearLabel}</div>
+          <div className="stats-grid">
+            <div className="stat-item">
+              <span className="stat-value" style={{ color: '#22c55e' }}>{yearStats.done}</span>
+              <span className="stat-label">Done</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value" style={{ color: '#06b6d4' }}>{yearStats.rest}</span>
+              <span className="stat-label">Rest</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value" style={{ color: '#eab308' }}>{yearStats.recovered}</span>
+              <span className="stat-label">Recovered</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value" style={{ color: '#ef4444' }}>{yearStats.missed}</span>
+              <span className="stat-label">Missed</span>
+            </div>
+          </div>
         </div>
-        <div className="stat-item">
-          <span className="stat-value" style={{ color: '#06b6d4' }}>{stats.rest}</span>
-          <span className="stat-label">Rest</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-value" style={{ color: '#eab308' }}>{stats.recovered}</span>
-          <span className="stat-label">Recovered</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-value" style={{ color: '#ef4444' }}>{stats.missed}</span>
-          <span className="stat-label">Missed</span>
+
+        <div className="stats-divider" />
+
+        <div className="stats-section">
+          <div className="stats-tag">{monthLabel}</div>
+          <div className="stats-grid">
+            <div className="stat-item">
+              <span className="stat-value" style={{ color: '#22c55e' }}>{monthStats.done}</span>
+              <span className="stat-label">Done</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value" style={{ color: '#06b6d4' }}>{monthStats.rest}</span>
+              <span className="stat-label">Rest</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value" style={{ color: '#eab308' }}>{monthStats.recovered}</span>
+              <span className="stat-label">Recovered</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-value" style={{ color: '#ef4444' }}>{monthStats.missed}</span>
+              <span className="stat-label">Missed</span>
+            </div>
+          </div>
         </div>
       </motion.div>
 

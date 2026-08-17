@@ -7,7 +7,6 @@ function App() {
       <div className="app">
         <header className="app-header">
           <h1>Workout Habit Tracker</h1>
-          <p>Build Consistency, One Day at a Time</p>
         </header>
         <main>
           <WorkoutTracker />
